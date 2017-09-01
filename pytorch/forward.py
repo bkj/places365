@@ -52,7 +52,7 @@ if __name__ == "__main__":
     model = torch.load('./whole_%s_places365.pth.tar' % args.arch).cuda()
     _ = model.eval()
     
-    print model
+    print >> sys.stderr, model
     
     prep = transforms.Compose([
             transforms.Scale(256),
@@ -64,7 +64,8 @@ if __name__ == "__main__":
     class_names = np.array([line.strip().split(' ')[0][3:] for line in open('categories_places365.txt')])
     
     for path in sys.stdin:
-        img = Image.open(path.strip())
+        path = path.strip()
+        img = Image.open(path)
         img = Variable(prep(img).unsqueeze(0), volatile=True).cuda()
         
         if args.classify:
